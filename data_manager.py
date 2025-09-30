@@ -1,4 +1,5 @@
 import requests
+from requests.auth import HTTPBasicAuth
 import os
 from dotenv import load_dotenv
 from flight_search import FlightSearch
@@ -8,10 +9,12 @@ class DataManager:
     def __init__(self):
         load_dotenv()
         self.sheety_endpoint = os.getenv("SHEETY_ENDPOINT")
-        self.sheet_data = {}
+        self.sheety_user = os.getenv("SHEETY_USER")
+        self.sheety_pass = os.getenv("SHEETY_PASS")
+        self.sheet_data = []
 
     def get_destination_data(self):
-        response = requests.get(self.sheety_endpoint)
+        response = requests.get(self.sheety_endpoint, auth=HTTPBasicAuth(self.sheety_user, self.sheety_pass))
         data = response.json()
         self.sheet_data = data["prices"]
         return self.sheet_data
@@ -32,7 +35,8 @@ class DataManager:
                     }
                 }
 
-                response = requests.put(url=f"{endpoint}/{id}", json=body)
+                response = requests.put(url=f"{endpoint}/{id}", json=body,
+                                        auth=HTTPBasicAuth(self.sheety_user, self.sheety_pass))
                 print(response.text)
 
 
