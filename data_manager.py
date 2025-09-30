@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from flight_search import FlightSearch
 
 class DataManager:
-    #This class is responsible for talking to the Google Sheet.
+
     def __init__(self):
         load_dotenv()
         self.sheety_endpoint = os.getenv("SHEETY_ENDPOINT")
